@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Crud Shop</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+        }
+
+        header {
+            padding: 0;
+            background-color: black;
+            color: white;
+            overflow: hidden;
+            height: 70px;
+            padding-left: 20px;
+
+        }
+
+        /* sidebar */
+        .sidebar {
+            margin: 0;
+            padding: 0;
+            width: 200px;
+            background-color: #f1f1f1;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
+
+        /* Sidebar links */
+        .sidebar a {
+            display: block;
+            color: black;
+            padding: 9px 10px 20px 30px;
+            text-decoration: none;
+
+            font-size: large;
+            font-weight: 600;
+        }
+
+        .sidebar a:first-child {
+            padding-top: 30px;
+        }
+
+
+        .sidebar a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Page content. The value of the margin-left property should match the value of 
+        the sidebar's width property */
+        .content {
+            margin-top: 50px;
+            margin-left: 220px;
+            padding: 1px 16px;
+            overflow: auto;
+            position: relative;
+
+
+
+        }
+
+        .title {
+
+            font-size: xx-large;
+            padding-bottom: 40px;
+        }
+
+        .actions {
+            margin-bottom: 30px;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            /* overflow: auto; */
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+
+            background-color: #ffffff;
+            margin: 15% auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-header {
+            padding: 2px 16px;
+            background-color: #ffffff;
+            color: rgb(24, 23, 23);
+        }
+
+        .modal-body {
+            padding: 2px 16px;
+            padding-bottom: 20px;
+
+        }
+
+        .modal-footer {
+            padding: 2px 16px;
+            background-color: #ffffff;
+            color: rgb(19, 19, 19);
+        }
+
+        .form-group {}
+
+        input {
+            margin: 2px;
+        }
+
+        /* tabela */
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            /* border: 1px solid #ddd; */
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 16px;
+
+        }
+
+        tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* mobile */
+        @media screen and (max-width: 700px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .sidebar a {
+                float: left;
+                padding-top: 30px;
+            }
+
+
+            div.content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Crud</h1>
+    </header>
+    <!-- <nav class="sidebar">
+        <a href="">Pedidos</a>
+        <a href="">Clientes</a>
+        <a href="">Produtos</a>
+    </nav> -->
+    <section class="content">
+
+
+        <div class="title">Clientes</div>
+
+        <div class="actions">
+            <button id="btnClient">Novo Cliente</button>
+            <button id="atualizar" onclick="atualizar()">Atualizar</button>
+
+        </div>
+        <!--Modal cliente-->
+        <div id="newClient" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h3>Cadastrar Usuário</h3>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST">
+                        <div class="form-group">
+                            <!-- nome -->
+                            <label for="fname">Nome:</label><br>
+                            <input type="text" id="fname" name="fname"><br>
+                            <!-- cpf -->
+                            <label for="text">CPF:</label><br>
+                            <input type="text" id="cpf" placeholder="" maxlength="11"><br>
+                            <!-- telefone -->
+                            <label for="email">Email:</label><br>
+                            <input class="" type="email" name="email" id="email" placeholder="fulano@dominio.com" />
+
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" onclick="add()" class="btnAdd">ADD</button>
+                    <button type="button" onclick="" class="btnDelete">Cancelar</button>
+                </div>
+
+            </div>
+
+            <!-- modal editar cliente -->
+
+            <!--Modal cliente-->
+            <div id="editClient" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close">&times;</span>
+                        <h3>Cadastrar Usuário</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="form-group">
+                                <!-- nome -->
+                                <label for="fname">Nome:</label><br>
+                                <input type="text" id="fname" name="fname"><br>
+                                <!-- cpf -->
+                                <label for="text" id="cpf">CPF:</label><br>
+                                <input type="text" placeholder="" maxlength="11"><br>
+                                <!-- telefone -->
+                                <label for="telefone">Telefone:</label><br>
+                                <input class="" type="tel" name="telefone" id="telefone" placeholder="(99)99999-9999"
+                                    pattern="^\(?\d{2}\)\d{5}[-\s]\d{4}.*?$" />
+
+                            </div>
+
+                        </form>
+                    </div>
+
+
+                    <div class="modal-footer">
+
+                        <button type="button" onclick="" class="salvar">Salvar</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- tabela -->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th>Opções</th>
+                </tr>
+            </thead>
+            <tbody class="clientesResult">
+
+                <!-- linha -->
+
+                <tr class="resultado">
+
+                </tr>
+
+
+    </section>
+
+    <script>
+
+
+
+
+        //abrir Modal newClient
+        $('#btnClient').click(function () {
+            $('#newClient').fadeIn();
+        });
+
+        //fechar Modal newClient
+        $('.close').click(function () {
+            $('#newClient').fadeOut();
+        });
+
+
+        //Função para add novo cliente na Tabela 
+
+        // function add() {
+        //     //O submit evento é enviado a um elemento quando o usuário está
+        //     // tentando enviar um formulário
+        //     $('form').submit(function (event) {
+        //         event.preventDefault();
+        //         let formData = {
+
+        //             nome: $('#fname').val(),
+        //             email: $('#email').val(),
+        //             cpf: $('#cpf').val()
+
+        //         }
+
+        //     });
+
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: 'http://localhost:3014/cliente',
+        //         dataType: 'json',
+        //         data: JSON.stringify(formData),
+        //         success: function (data) {
+        //             successmessage: 'Ok'
+        //         },
+        //         error: function (data) {
+        //             console.log('Algo deu errado!')
+        //         }
+        //     });
+        // }
+
+        //Função Atualizar 
+        function atualizar() {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:3014/',
+
+                success: function (data) {
+
+                    for (let i in data.resultados) {
+                        console.log(data.resultados)
+                        $('.table tbody').append(
+
+                            '<tr>' +
+                            '<td>' + data.resultados[i].id + '</td>' +
+                            '<td>' + data.resultados[i].nome + '</td>' +
+
+                            '<td>' + data.resultados[i].cpf + '</td>' +
+                            '<td>' + data.resultados[i].email + '</td>' +
+
+                            '<td>' +
+
+                            '<button>Editar</button>' +
+                            '<button class="delete">Excluir</button>' +
+                            '</td>' +
+
+                            '</tr>'
+                        )
+                    }
+
+                    
+                },
+                dataType: 'json',
+                error: function (dados) {
+                    console.log('Algo deu errado!')
+                }
+            });
+        }
+
+
+        $('.delete').click(function () {
+
+            let deleteId = $(this).attr('#id')
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:3014/',
+                data: deleteId,
+                success: function (data) {
+
+                    $('tr').remove()
+                },
+                dataType: 'json',
+                error: function (dados) {
+                    console.log('Algo deu errado!')
+                }
+            });
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>
